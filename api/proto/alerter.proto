@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package alerter.v1;
+
+option go_package = "github.com/user/price-alerter/api/proto;alerterv1";
+
+service PriceAlerterService {
+  rpc CreateSubscription(CreateSubscriptionRequest) returns (CreateSubscriptionResponse);
+  rpc ListSubscriptions(ListSubscriptionsRequest) returns (ListSubscriptionsResponse);
+  rpc DeleteSubscription(DeleteSubscriptionRequest) returns (DeleteSubscriptionResponse);
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse);
+}
+
+message CreateSubscriptionRequest {
+  string user_id = 1;
+  string symbol = 2;
+  string condition = 3; // "GT" or "LT"
+  double threshold = 4;
+}
+
+message CreateSubscriptionResponse {
+  string id = 1;
+  bool active = 2;
+}
+
+message ListSubscriptionsRequest {
+  string user_id = 1;
+}
+
+message SubscriptionItem {
+  string id = 1;
+  string user_id = 2;
+  string symbol = 3;
+  string condition = 4;
+  double threshold = 5;
+  bool active = 6;
+}
+
+message ListSubscriptionsResponse {
+  repeated SubscriptionItem items = 1;
+}
+
+message DeleteSubscriptionRequest {
+  string id = 1;
+}
+
+message DeleteSubscriptionResponse {
+  bool deleted = 1;
+}
+
+message GetQuoteRequest {
+  string symbol = 1;
+}
+
+message GetQuoteResponse {
+  string symbol = 1;
+  double price = 2;
+  string source = 3;
+  int64 timestamp_unix_ms = 4;
+}
